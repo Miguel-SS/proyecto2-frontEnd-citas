@@ -1,9 +1,11 @@
 package frontend.una.cr.controller;
 
 import frontend.una.cr.model.Appointment;
+import frontend.una.cr.model.Hospital;
 import frontend.una.cr.model.Patient;
 import frontend.una.cr.service.ServiceFacade;
 import frontend.una.cr.utilities.Constants;
+import frontend.una.cr.view.LoginView;
 import frontend.una.cr.view.PatientView;
 
 import javax.swing.*;
@@ -133,14 +135,15 @@ public class PatientController implements ActionListener {
     private void createAppointment() {
         char firstLetter = view.getHourComboBox().charAt(0);
         Date date = view.getDateTxtField();
-        if(date != null && firstLetter != '-') {
+        Hospital hospital = getHospital(date);
+        if(date != null && firstLetter != '-' && hospital != null) {
             if(date.getDay() != 0 && date.getDay() != 3 && date.getDay() != 6) {
                 int ranID = (new Random()).nextInt();
                 while (service.searchAppointment(ranID) != null || ranID < 0) {
                     ranID = (new Random()).nextInt();
                 }
                 Appointment newAppointment = new Appointment(ranID,
-                        patient, view.getHourComboBox(), date
+                        patient, hospital, date
                 );
                 service.add(newAppointment);
                 patient.add(newAppointment);
@@ -151,5 +154,17 @@ public class PatientController implements ActionListener {
                         "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
+    }
+
+    private Hospital getHospital(Date d) {
+        String auxDate = d.toString();
+        String dayOfWeek = auxDate.substring(0,3);
+        if(d.getDay() == 1 || d.getDay() == 2) {
+            return service.getHospital("Hospital CYM");
+        }
+        if(d.getDay() == 4 || d.getDay() == 5) {
+            return service.getHospital("Centro Medico del Este");
+        }
+        return null;
     }
 }

@@ -98,17 +98,4 @@ public class LoginController implements ActionListener {
         }
         return false;
     }
-
-    /*
-    private boolean verifyPass(String id, String password, AdminModel admin) {
-        if (id != null && password != null && !"".equals(id) && !"".equals(password)) {
-            if (admin != null) {
-                if (id.equals(admin.getId()) && password.equals(admin.getPassword())) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-    */
 }
